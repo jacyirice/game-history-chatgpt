@@ -32,7 +32,7 @@ Antes de executar o programa, é necessário criar um arquivo `.env` no diretór
 - Insira a seguinte linha no arquivo `.env`, substituindo `<SUA_CHAVE_DE_API>` pela sua chave de API do OpenAI:
 
         OPENAI_API_KEY=<SUA_CHAVE_DE_API>
-- Duvidas? Acesse o site da (OpenAI)[https://platform.openai.com/docs/quickstart/build-your-application] 
+- Duvidas? Acesse o site da [OpenAI](https://platform.openai.com/docs/quickstart/build-your-application) 
 4. Execute o programa Python:
 
 ```shell
