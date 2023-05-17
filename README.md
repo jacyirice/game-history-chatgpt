@@ -59,7 +59,11 @@ A história gerada seguirá as seguintes diretrizes:
 
 ## Validação de Entrada
 
-Para garantir a sintaxe correta das ações do jogador, o programa utiliza um parser ANTLR. O parser verifica se a entrada do usuário segue o formato "<PERSONAGEM>: <AÇÃO>". Caso a sintaxe seja inválida, uma mensagem de erro será exibida e uma nova ação será solicitada.
+Para garantir a sintaxe correta das ações do jogador, o programa utiliza um parser ANTLR. O parser verifica se a entrada do usuário segue o formato:
+                
+    <PERSONAGEM>: <AÇÃO>
+
+Caso a sintaxe seja inválida, uma mensagem de erro será exibida e uma nova ação será solicitada.
 
 ## Observações
 
