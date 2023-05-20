@@ -52,16 +52,18 @@ def show_scene(prompt: dict) -> None:
 
 def main():
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    player_name = input("Qual o seu nome? ")
-    messages = get_initial_messages(player_name)
-    prompt = get_next_scene(messages, False)
-    show_scene(prompt)
+
+    messages = get_initial_messages(input("Qual o seu nome? "))
+    scene_count = 0
+    prompt = {}
+
     while (
-        len(messages) < 10
-        and "Fim da história".lower() not in prompt["content"].lower()
+        scene_count < 5
+        and "Fim da história".lower() not in prompt.get("content", "").lower()
     ):
-        prompt = get_next_scene(messages)
+        prompt = get_next_scene(messages, user_action=scene_count > 0)
         show_scene(prompt)
+        scene_count += 1
 
 
 if __name__ == "__main__":
