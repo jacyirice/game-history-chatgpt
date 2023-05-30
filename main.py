@@ -1,69 +1,52 @@
 import openai
 import os
 from dotenv import load_dotenv
-from antlr.entrada_usuario import validar_sintaxe_entrada
+from gpt_story import GPTStory
 
 load_dotenv()
 
 
-def get_prompt(messages: list) -> dict:
-    return openai.ChatCompletion.create(
-        model="gpt-3.5-turbo", messages=messages, temperature=0.7, max_tokens=500
-    ).choices[0]["message"]
+messages = [
+    {
+        "role": "system",
+        "content": """
+Você é um escritor de historias e está criando uma historia em quadrinhos para um jogo de computador.
 
+Crie um historia com, no maximo, LIMIT_SCENES cenas. 
+1. A cada cena apresente com riqueza de detalhes os sentimentos do personagem, as caracteristicas fisicas e vestimentas do personagem e o ambiente;
+2. Todos os personagens devem ter um nome;
+3. Toda cena deve ter um dialogo;
+4. Utilize palavras de baixo calao na historia;
+5. Pergunte "qual a proxima ação?" e aguarde a resposta;
+6. Utilize a ação para criar a proxima cena;
+7. Finalize a ultima cena com a frase "Fim da historia";
+8.O nome do jogador é PLAYER_NAME, refira a ele utilizando a segunda pessoa do singular;
+9. Não ultrapasse o limite de cenas;
 
-def get_initial_messages(player_name: str) -> list:
-    return [
-        {
-            "role": "system",
-            "content": f"""
-Crie um historia com, no maximo, 4 cenas. 
-1. Não quero cenas curtas e mal desenvolvidas, quero cenas com dialogos e que mantenham o interesse do jogador;
-2. A historia deve começar apresentando um homem, que no caso é o jogador, em um ambiente aleatorio e terminar com a cena do homem encontrando a mulher traindo ele com 7 homens pelados, deixe explicito que ele encontrou os 7 homens e que o jogador é corno; 
-3. Utilize palavras de baixo calao na historia para dar um mais realista e menos culto;
-4. A cada cena você deve pedir para eu digitar uma ação e criar a proxima cena baseada nessa ação. Pergunte "qual a proxima ação?" e aguarde a resposta;
-5. O nome do jogador é {player_name}, refira a ele utilizando a segunda pessoa do singular e apresente cada novo personagem com um nome novo.
-6. Mostre o numero da cena no inicio e Não ultrapasse o limite de cenas
-7. Finalize a ultima cena com a frase "Fim da historia"
+Base da cena 1: O jogador está em um ambiente aleatorio e feliz;
+Base da cena final: O jogador encontra a conjuge traindo ele com 7 homens pelados, deixe explicito que ele encontrou os 7 homens e que o jogador é corno.
 """,
-        },
-        {
-            "role": "user",
-            "content": "Apresente a primeira cena mostrando o numero da cena no inicio",
-        },
-    ]
-
-
-def get_next_scene(messages: list, user_action: bool = True) -> dict:
-    if user_action:
-        action = input("Resposta:")
-        while not validar_sintaxe_entrada(action):
-            action = input("\nResposta:")
-        messages.append({"role": "user", "content": action})
-    prompt = get_prompt(messages)
-    messages.append(dict(prompt))
-    return prompt
-
-
-def show_scene(prompt: dict) -> None:
-    print()
-    print(prompt["content"])
+    },
+    {
+        "role": "user",
+        "content": "Apresente a primeira cena mostrando o numero da cena no inicio",
+    },
+]
 
 
 def main():
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    messages = get_initial_messages(input("Qual o seu nome? "))
-    scene_count = 0
-    prompt = {}
+    player_name = input("Qual o seu nome? ")
+    limit_scenes = 2
+    messages[0]["content"] = messages[0]["content"].replace("PLAYER_NAME", player_name)
+    messages[0]["content"] = messages[0]["content"].replace(
+        "LIMIT_SCENES", str(limit_scenes)
+    )
 
-    while (
-        scene_count < 5
-        and "Fim da história".lower() not in prompt.get("content", "").lower()
-    ):
-        prompt = get_next_scene(messages, user_action=scene_count > 0)
-        show_scene(prompt)
-        scene_count += 1
+    gpt_story = GPTStory(messages, limit_scenes, player_name)
+    gpt_story.run()
+    gpt_story.save_messages()
 
 
 if __name__ == "__main__":
