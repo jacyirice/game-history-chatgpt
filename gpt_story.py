@@ -68,7 +68,10 @@ class GPTStory:
         )
         file_name = self.generate_prompt()["content"]
         with open(f"data/{file_name}.json", "w") as f:
-            f.write(json.dumps(self.messages))
+            txt = json.dumps(self.messages)
+            txt = txt.replace(self.player_name, "PLAYER_NAME")
+            txt = txt.replace(str(self.limit_scenes), "LIMIT_SCENES")
+            f.write(txt)
 
     def run(self) -> None:
         self.prepare_initial_messages()
