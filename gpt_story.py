@@ -1,6 +1,15 @@
 import openai
 import json
-from antlr.entrada_usuario import validar_sintaxe_entrada
+from antlr.enter_player.syntax import valid as valid_syntax_enter_user
+from antlr.data_story.syntax import valid as valid_syntax_data_story
+
+
+def get_multi_line_input(default_message: str, num_lines: int = 3):
+    lines = []
+    lines.append(input(default_message))
+    for _ in range(num_lines-1):
+        lines.append(input())
+    return "\n".join(lines)
 
 
 class GPTStory:
@@ -14,15 +23,20 @@ class GPTStory:
 
     def prepare_initial_messages(self) -> None:
         if self.messages:
-            return None
+            if not valid_syntax_data_story(json.dumps(self.messages)):
+                raise Exception("Invalid syntax in data/messages.json")
+        else:
+            with open("data/messages.json", "r") as f:
+                messages = f.read()
 
-        with open("data/messages.json", "r") as f:
-            messages = f.read()
-            messages = messages.replace(
-                "PLAYER_NAME", self.player_name or input("Qual o seu nome? ")
-            )
-            messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
-            self.messages = json.loads(messages)
+                if not valid_syntax_data_story(messages):
+                    raise Exception("Invalid syntax in data/messages.json")
+
+                messages = messages.replace(
+                    "PLAYER_NAME", self.player_name or input("Qual o seu nome? ")
+                )
+                messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
+                self.messages = json.loads(messages)
         return None
 
     def generate_prompt(self) -> dict:
@@ -38,9 +52,9 @@ class GPTStory:
         return dict(prompt.choices[0]["message"])
 
     def get_action_from_user(self, default_message: str = "Resposta:") -> str:
-        action = input(default_message)
-        while not validar_sintaxe_entrada(action):
-            action = input("\n"+default_message)
+        action = get_multi_line_input(default_message)
+        while not valid_syntax_enter_user(action):
+            action = get_multi_line_input("\n" + default_message)
         return action
 
     def generate_next_scene(self, user_action: bool = True) -> dict:
