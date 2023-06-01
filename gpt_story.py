@@ -7,36 +7,42 @@ from antlr.data_story.syntax import valid as valid_syntax_data_story
 def get_multi_line_input(default_message: str, num_lines: int = 3):
     lines = []
     lines.append(input(default_message))
-    for _ in range(num_lines-1):
+    for _ in range(num_lines - 1):
         lines.append(input())
     return "\n".join(lines)
 
 
 class GPTStory:
     def __init__(
-        self, messages: list = [], limit_scenes: int = 5, player_name: str = ""
+        self, base_scenes: dict, messages: list = [], limit_scenes: int = 5, player_name: str = ""
     ):
         self.model = "gpt-3.5-turbo-0301"
+        self.base_scenes = base_scenes
         self.messages = messages
         self.limit_scenes = limit_scenes
         self.player_name = player_name
+        self.base_messages = []
 
     def prepare_initial_messages(self) -> None:
+        with open("data/messages.json", "r") as f:
+            messages = f.read()
+
+            if not self.player_name:
+                self.player_name = input("Qual o seu nome? ")
+
+            messages = messages.replace("PLAYER_NAME", self.player_name)
+            messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
+            messages = messages.replace("BASE_CENA_1", self.base_scenes["cena_1"])
+            messages = messages.replace("BASE_CENA_FINAL", self.base_scenes["cena_final"])
+            self.base_messages = json.loads(messages)
+
         if self.messages:
             if not valid_syntax_data_story(json.dumps(self.messages)):
                 raise Exception("Invalid syntax in data/messages.json")
+
+            self.messages = self.base_messages + self.messages
         else:
-            with open("data/messages.json", "r") as f:
-                messages = f.read()
-
-                if not valid_syntax_data_story(messages):
-                    raise Exception("Invalid syntax in data/messages.json")
-
-                messages = messages.replace(
-                    "PLAYER_NAME", self.player_name or input("Qual o seu nome? ")
-                )
-                messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
-                self.messages = json.loads(messages)
+            self.messages = self.base_messages.copy()
         return None
 
     def generate_prompt(self) -> dict:
@@ -77,14 +83,13 @@ class GPTStory:
         self.messages.append(
             {
                 "role": "user",
-                "content": "Crie um nome curto para a historia e me retorne apenas o nome utilizando snack_case",
+                "content": "Crie um nome curto para a historia, me retorne APENAS o nome utilizando snack_case",
             }
         )
         file_name = self.generate_prompt()["content"]
         with open(f"data/{file_name}.json", "w") as f:
-            txt = json.dumps(self.messages)
+            txt = json.dumps(self.messages[2:-1])
             txt = txt.replace(self.player_name, "PLAYER_NAME")
-            txt = txt.replace(str(self.limit_scenes), "LIMIT_SCENES")
             f.write(txt)
 
     def run(self) -> None:
