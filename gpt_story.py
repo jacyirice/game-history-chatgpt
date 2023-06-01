@@ -29,7 +29,9 @@ class GPTStory:
 
             if not self.player_name:
                 self.player_name = input("Qual o seu nome? ")
-
+            if self.messages:
+                self.limit_scenes += str(self.messages).count("assistant")
+            
             messages = messages.replace("PLAYER_NAME", self.player_name)
             messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
             messages = messages.replace("BASE_CENA_1", self.base_scenes["cena_1"])

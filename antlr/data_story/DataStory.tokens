@@ -19,4 +19,4 @@ WS=12
 ':'=7
 '"content"'=8
 '"user"'=9
-'"system"'=10
+'"assistant"'=10

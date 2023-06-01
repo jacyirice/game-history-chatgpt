@@ -35,7 +35,7 @@ class DataStoryParser ( Parser ):
     sharedContextCache = PredictionContextCache()
 
     literalNames = [ "<INVALID>", "'['", "','", "']'", "'{'", "'}'", "'\"role\"'", 
-                     "':'", "'\"content\"'", "'\"user\"'", "'\"system\"'" ]
+                     "':'", "'\"content\"'", "'\"user\"'", "'\"assistant\"'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
