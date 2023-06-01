@@ -8,7 +8,7 @@ object: '{' pair '}';
 
 pair: '"role"' ':' roleValue ',' '"content"' ':' contentValue;
 
-roleValue: '"user"' | '"system"';
+roleValue: '"user"' | '"assistant"';
 
 contentValue: STRING;
 

@@ -4,7 +4,7 @@ mensagem: (personagemacao '\n')+ 'Sentimentos:' sentimentos ('\n')*?;
 personagemacao: nome ':' acao;
 nome: TEXT;
 acao: TEXT (' ' TEXT)*?;
-sentimentos: sentimento (' ' sentimento)*?;
+sentimentos: sentimento (', ' sentimento)*?;
 sentimento: ALEGRIA | TRISTEZA | RAIVA | NOJINHO | MEDO;
 
 ALEGRIA: [Aa][Ll][Ee][Gg][Rr][Ii][Aa];
