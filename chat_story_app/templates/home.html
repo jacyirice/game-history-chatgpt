@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+        }
+
+        .form-title {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            color: #343a40;
+        }
+
+        .form-control-file {
+            color: #343a40;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="form-title">Configurações da historia</h1>
+        <form method="post" action="{% url 'home_view' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cena_1">Cena Inicial:</label>
+                <textarea class="form-control" id="cena_1" name="cena_1" rows="2">O jogador está em um ambiente aleatório e feliz;</textarea>
+            </div>
+            <div class="form-group">
+                <label for="cena_final">Cena Final:</label>
+                <textarea class="form-control" id="cena_final" name="cena_final" rows="2">O jogador encontra a conjuge traindo ele com 7 homens pelados;</textarea>
+            </div>
+            <div class="form-group">
+                <label for="limit_scenes">Limite de Cenas:</label>
+                <input class="form-control" type="number" id="limit_scenes" name="limit_scenes" value="2">
+            </div>
+            <div class="form-group">
+                <label for="player_name">Nome do Jogador:</label>
+                <input class="form-control" id="player_name" name="player_name" value="João">
+            </div>
+            {% if error_input_file %}
+                <div class="alert alert-danger">{{ error_input_file }}</div>
+            {% endif %}
+            <div class="form-group">
+                <label for="messages">Arquivo de Mensagens:</label>
+                <input class="form-control-file" type="file" id="messages" name="messages">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
