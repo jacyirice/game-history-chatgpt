@@ -22,7 +22,6 @@ def valid(resposta: str) -> bool:
     parser.removeErrorListeners()
     parser.addErrorListener(error_listener)
     tree = parser.mensagem()
-    print(1, error_listener.errors)
     if parser.getNumberOfSyntaxErrors() > 0:
         return (
             False,
