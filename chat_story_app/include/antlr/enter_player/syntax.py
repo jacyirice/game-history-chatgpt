@@ -25,7 +25,7 @@ def valid(resposta: str) -> bool:
     if parser.getNumberOfSyntaxErrors() > 0:
         return (
             False,
-            ';\n'.join(error_listener.errors)
+            ";\n".join(error_listener.errors)
             + "\n\nEntrada inválida! A sintaxe não está correta."
             + "\nUtilize a sintaxe:"
             + "\n<NOME DO PERSONAGEM>: <AÇÃO DO PERSONAGEM>"

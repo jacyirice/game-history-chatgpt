@@ -6,15 +6,13 @@ from django.contrib.auth.decorators import login_required
 from .include.antlr.enter_player.syntax import valid as valid_syntax_enter_user
 from .include.antlr.data_story.syntax import valid as valid_syntax_data_story
 from .utils import get_gpt_story
-from.models import StoryCount
+from .models import StoryCount
 
 # Create your views here.
 
 
 @login_required
 def home_view(request):
-    
-        
     if request.method == "POST":
         if (
             request.POST.get("cena_1")
@@ -29,21 +27,13 @@ def home_view(request):
                 if not status:
                     context = {"error_input_file": error}
                     return render(request, "home.html", context)
-                
+
             gpt_story = get_gpt_story(request, messages=messages)
             return redirect("chat_view")
         else:
             return redirect("home_view")
     else:
         if "gpt_story" in request.session:
-            if not StoryCount.objects.filter(user=request.user).exists():
-                StoryCount.objects.create(user=request.user, count=1)
-            elif StoryCount.objects.get(user=request.user).count >= 3:
-                return render(request, "home.html")
-            else:
-                story_count = StoryCount.objects.get(user=request.user)
-                story_count.count += 1
-                story_count.save()
             del request.session["gpt_story"]
 
         return render(request, "home.html")

@@ -1,4 +1,4 @@
-# Generated from ..\antlr\enter_player\EnterPlayer.g4 by ANTLR 4.12.0
+# Generated from enter_player\EnterPlayer.g4 by ANTLR 4.12.0
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .EnterPlayerParser import EnterPlayerParser

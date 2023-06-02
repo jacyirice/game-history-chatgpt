@@ -1,7 +1,5 @@
 import openai
 import json
-from .antlr.enter_player.syntax import valid as valid_syntax_enter_user
-from .antlr.data_story.syntax import valid as valid_syntax_data_story
 
 
 def get_multi_line_input(default_message: str, num_lines: int = 3):
@@ -19,7 +17,7 @@ class GPTStory:
         messages: list = [],
         limit_scenes: int = 5,
         player_name: str = "",
-        scene_count = 0
+        scene_count: int = 0,
     ):
         self.model = "gpt-3.5-turbo-0301"
         self.base_scenes = base_scenes
@@ -28,8 +26,6 @@ class GPTStory:
         self.player_name = player_name
         self.base_messages = []
         self.scene_count = scene_count
-
-        
 
     def prepare_initial_messages(self) -> None:
         with open("data/messages.json", "r") as f:
@@ -64,9 +60,13 @@ class GPTStory:
         )
         return dict(prompt.choices[0]["message"])
 
-    def generate_next_scene(self) -> dict:
+    def generate_next_scene(self, cont: int = 0) -> dict:
         prompt = self.generate_prompt()
         self.messages.append(prompt)
+        if not self.finished_scene() and cont < 3:
+            print(cont)
+            self.generate_next_scene(cont + 1)
+            self.messages[-1]["content"] += self.messages.pop(-1)
         return prompt
 
     def get_last_scene(self) -> None:
@@ -85,20 +85,30 @@ class GPTStory:
         txt = txt.replace(self.player_name, "PLAYER_NAME")
 
         return file_name, txt
-        
+
     def has_next_scene(self) -> bool:
-        return self.scene_count <= self.limit_scenes and "Fim da história".lower() not in self.messages[-1]["content"].lower()
-    
+        return (
+            self.scene_count <= self.limit_scenes
+            and "Fim da história".lower() not in self.messages[-1]["content"].lower()
+        )
+
+    def finished_scene(self) -> bool:
+        scene = self.messages[-1]["content"].lower()
+        return (
+            "Fim da história".lower() in scene
+            or "próxima ação".lower() in scene
+            or "Fim da cena".lower() in scene
+        )
+
     def next_scene(self) -> None:
         if self.has_next_scene():
             self.generate_next_scene()
             self.scene_count += 1
 
-
     def run(self) -> None:
         self.prepare_initial_messages()
         return self.next_scene()
-        
+
     def __dict__(self) -> dict:
         return {
             "base_scenes": self.base_scenes,

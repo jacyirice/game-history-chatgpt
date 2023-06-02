@@ -1,4 +1,4 @@
-# Generated from ..\antlr\enter_player\EnterPlayer.g4 by ANTLR 4.12.0
+# Generated from enter_player\EnterPlayer.g4 by ANTLR 4.12.0
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -10,22 +10,26 @@ else:
 
 def serializedATN():
     return [
-        4,1,12,52,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,1,0,1,
+        4,1,12,64,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,1,0,1,
         0,1,0,4,0,16,8,0,11,0,12,0,17,1,0,1,0,1,0,5,0,23,8,0,10,0,12,0,26,
-        9,0,1,1,1,1,1,1,1,1,1,2,1,2,1,3,1,3,1,3,5,3,37,8,3,10,3,12,3,40,
-        9,3,1,4,1,4,1,4,5,4,45,8,4,10,4,12,4,48,9,4,1,5,1,5,1,5,3,24,38,
-        46,0,6,0,2,4,6,8,10,0,1,1,0,6,10,49,0,15,1,0,0,0,2,27,1,0,0,0,4,
-        31,1,0,0,0,6,33,1,0,0,0,8,41,1,0,0,0,10,49,1,0,0,0,12,13,3,2,1,0,
-        13,14,5,1,0,0,14,16,1,0,0,0,15,12,1,0,0,0,16,17,1,0,0,0,17,15,1,
-        0,0,0,17,18,1,0,0,0,18,19,1,0,0,0,19,20,5,2,0,0,20,24,3,8,4,0,21,
-        23,5,1,0,0,22,21,1,0,0,0,23,26,1,0,0,0,24,25,1,0,0,0,24,22,1,0,0,
-        0,25,1,1,0,0,0,26,24,1,0,0,0,27,28,3,4,2,0,28,29,5,3,0,0,29,30,3,
-        6,3,0,30,3,1,0,0,0,31,32,5,11,0,0,32,5,1,0,0,0,33,38,5,11,0,0,34,
-        35,5,4,0,0,35,37,5,11,0,0,36,34,1,0,0,0,37,40,1,0,0,0,38,39,1,0,
-        0,0,38,36,1,0,0,0,39,7,1,0,0,0,40,38,1,0,0,0,41,46,3,10,5,0,42,43,
-        5,5,0,0,43,45,3,10,5,0,44,42,1,0,0,0,45,48,1,0,0,0,46,47,1,0,0,0,
-        46,44,1,0,0,0,47,9,1,0,0,0,48,46,1,0,0,0,49,50,7,0,0,0,50,11,1,0,
-        0,0,4,17,24,38,46
+        9,0,1,1,1,1,1,1,1,1,1,2,1,2,1,3,5,3,35,8,3,10,3,12,3,38,9,3,1,3,
+        1,3,1,3,5,3,43,8,3,10,3,12,3,46,9,3,1,4,5,4,49,8,4,10,4,12,4,52,
+        9,4,1,4,1,4,1,4,5,4,57,8,4,10,4,12,4,60,9,4,1,5,1,5,1,5,5,24,36,
+        44,50,58,0,6,0,2,4,6,8,10,0,1,1,0,6,10,63,0,15,1,0,0,0,2,27,1,0,
+        0,0,4,31,1,0,0,0,6,36,1,0,0,0,8,50,1,0,0,0,10,61,1,0,0,0,12,13,3,
+        2,1,0,13,14,5,1,0,0,14,16,1,0,0,0,15,12,1,0,0,0,16,17,1,0,0,0,17,
+        15,1,0,0,0,17,18,1,0,0,0,18,19,1,0,0,0,19,20,5,2,0,0,20,24,3,8,4,
+        0,21,23,5,1,0,0,22,21,1,0,0,0,23,26,1,0,0,0,24,25,1,0,0,0,24,22,
+        1,0,0,0,25,1,1,0,0,0,26,24,1,0,0,0,27,28,3,4,2,0,28,29,5,3,0,0,29,
+        30,3,6,3,0,30,3,1,0,0,0,31,32,5,11,0,0,32,5,1,0,0,0,33,35,5,4,0,
+        0,34,33,1,0,0,0,35,38,1,0,0,0,36,37,1,0,0,0,36,34,1,0,0,0,37,39,
+        1,0,0,0,38,36,1,0,0,0,39,44,5,11,0,0,40,41,5,4,0,0,41,43,5,11,0,
+        0,42,40,1,0,0,0,43,46,1,0,0,0,44,45,1,0,0,0,44,42,1,0,0,0,45,7,1,
+        0,0,0,46,44,1,0,0,0,47,49,5,4,0,0,48,47,1,0,0,0,49,52,1,0,0,0,50,
+        51,1,0,0,0,50,48,1,0,0,0,51,53,1,0,0,0,52,50,1,0,0,0,53,58,3,10,
+        5,0,54,55,5,5,0,0,55,57,3,10,5,0,56,54,1,0,0,0,57,60,1,0,0,0,58,
+        59,1,0,0,0,58,56,1,0,0,0,59,9,1,0,0,0,60,58,1,0,0,0,61,62,7,0,0,
+        0,62,11,1,0,0,0,6,17,24,36,44,50,58
     ]
 
 class EnterPlayerParser ( Parser ):
@@ -279,20 +283,31 @@ class EnterPlayerParser ( Parser ):
         self.enterRule(localctx, 6, self.RULE_acao)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 33
-            self.match(EnterPlayerParser.TEXT)
-            self.state = 38
+            self.state = 36
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
             while _alt!=1 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1+1:
-                    self.state = 34
-                    self.match(EnterPlayerParser.T__3)
-                    self.state = 35
-                    self.match(EnterPlayerParser.TEXT) 
-                self.state = 40
+                    self.state = 33
+                    self.match(EnterPlayerParser.T__3) 
+                self.state = 38
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,2,self._ctx)
+
+            self.state = 39
+            self.match(EnterPlayerParser.TEXT)
+            self.state = 44
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
+            while _alt!=1 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1+1:
+                    self.state = 40
+                    self.match(EnterPlayerParser.T__3)
+                    self.state = 41
+                    self.match(EnterPlayerParser.TEXT) 
+                self.state = 46
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -337,20 +352,31 @@ class EnterPlayerParser ( Parser ):
         self.enterRule(localctx, 8, self.RULE_sentimentos)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 41
-            self.sentimento()
-            self.state = 46
+            self.state = 50
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,4,self._ctx)
             while _alt!=1 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1+1:
-                    self.state = 42
-                    self.match(EnterPlayerParser.T__4)
-                    self.state = 43
-                    self.sentimento() 
-                self.state = 48
+                    self.state = 47
+                    self.match(EnterPlayerParser.T__3) 
+                self.state = 52
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,3,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,4,self._ctx)
+
+            self.state = 53
+            self.sentimento()
+            self.state = 58
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
+            while _alt!=1 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1+1:
+                    self.state = 54
+                    self.match(EnterPlayerParser.T__4)
+                    self.state = 55
+                    self.sentimento() 
+                self.state = 60
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,5,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -404,7 +430,7 @@ class EnterPlayerParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 49
+            self.state = 61
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 1984) != 0)):
                 self._errHandler.recoverInline(self)

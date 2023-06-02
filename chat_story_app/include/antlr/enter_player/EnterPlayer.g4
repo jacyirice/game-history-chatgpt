@@ -3,8 +3,8 @@ grammar EnterPlayer;
 mensagem: (personagemacao '\n')+ 'Sentimentos:' sentimentos ('\n')*?;
 personagemacao: nome ':' acao;
 nome: TEXT;
-acao: TEXT (' ' TEXT)*?;
-sentimentos: sentimento (', ' sentimento)*?;
+acao: ' '*? TEXT (' ' TEXT)*?;
+sentimentos: ' '*? sentimento (', ' sentimento)*?;
 sentimento: ALEGRIA | TRISTEZA | RAIVA | NOJINHO | MEDO;
 
 ALEGRIA: [Aa][Ll][Ee][Gg][Rr][Ii][Aa];
@@ -13,5 +13,5 @@ RAIVA: [Rr][Aa][Ii][Vv][Aa];
 NOJINHO: [Nn][Oo][Jj][Ii][Nn][Hh][Oo];
 MEDO: [Mm][Ee][Dd][Oo];
 
-TEXT: [a-zA-Z]+;
+TEXT: [a-zA-Z\u00C0-\u00FF]+;
 WS: [ \t\r]+ -> skip;
