@@ -9,6 +9,7 @@ from .include.antlr.enter_player.syntax import valid as valid_syntax_enter_user
 from .include.antlr.data_story.syntax import valid as valid_syntax_data_story
 from .utils import get_gpt_story
 from .models import ChatStory
+
 # Create your views here.
 
 
@@ -27,25 +28,27 @@ class HomeView(View):
         cena_final = request.POST.get("cena_final")
         limit_scenes = request.POST.get("limit_scenes")
         player_name = request.POST.get("player_name")
+        messages = request.FILES.get("messages")
 
-        if cena_final and limit_scenes and player_name:
-            messages = request.FILES.get("messages")
-            url = "chat_view"
+        if not (cena_final and limit_scenes and player_name):
+            return redirect("home_view")
 
-            if messages:
-                messages = messages.read().decode("utf-8")
-                status, error = valid_syntax_data_story(messages)
+        if not (cena_1 or messages):
+            return redirect("home_view")
 
-                if not status:
-                    context = {"error_input_file": error}
-                    return render(request, self.template_name, context)
+        url = "chat_view"
+        if messages:
+            messages = messages.read().decode("utf-8")
+            status, error = valid_syntax_data_story(messages)
 
-                url = reverse(url) + f"?scene_num=0"
+            if not status:
+                context = {"error_input_file": error}
+                return render(request, self.template_name, context)
 
-            gpt_story = get_gpt_story(request, messages=messages)
-            return redirect(url)
+            url = reverse(url) + f"?scene_num=0"
 
-        return redirect("home_view")
+        gpt_story = get_gpt_story(request, messages=messages)
+        return redirect(url)
 
 
 @method_decorator(login_required, name="dispatch")
@@ -66,7 +69,7 @@ class ChatView(View):
             context = {
                 "texto": gpt_story.messages[scene_num]["content"],
                 "scene_num": str(scene_num),
-                "last_scene_num": len(gpt_story.messages)-1,
+                "last_scene_num": len(gpt_story.messages) - 1,
             }
         else:
             gpt_story = get_gpt_story(request, create=False)
@@ -96,7 +99,7 @@ class ChatView(View):
                 }
             )
             return render(request, self.template_name, context)
-        
+
         gpt_story_session = request.session["gpt_story"].copy()
         gpt_story_session["messages"].append(
             {
@@ -118,11 +121,7 @@ def download_story(request):
     file_name, txt = gpt_story.save_messages()
     response = HttpResponse(txt, content_type="text/plain")
     response["Content-Disposition"] = f'attachment; filename="{file_name}"'
-    
-    ChatStory.objects.create(
-        title=file_name,
-        description=txt,
-        user=request.user
-    )
-    
+
+    ChatStory.objects.create(title=file_name, description=txt, user=request.user)
+
     return response

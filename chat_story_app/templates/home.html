@@ -42,15 +42,18 @@
 <body>
     <div class="container">
         <h1 class="form-title">Configurações da historia</h1>
+        {% if error_form %}
+            <div class="alert alert-danger">{{ error_form }}</div>
+        {% endif %}
         <form method="post" action="{% url 'home_view' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="cena_1">Cena Inicial:</label>
-                <textarea class="form-control" id="cena_1" name="cena_1" rows="2">O jogador está em um ambiente aleatório e feliz;</textarea>
+                <textarea class="form-control" id="cena_1" name="cena_1" rows="2"></textarea>
             </div>
             <div class="form-group">
                 <label for="cena_final">Cena Final:</label>
-                <textarea class="form-control" id="cena_final" name="cena_final" rows="2">O jogador encontra a conjuge traindo ele;</textarea>
+                <textarea class="form-control" id="cena_final" name="cena_final" rows="2"></textarea>
             </div>
             <div class="form-group">
                 <label for="limit_scenes">Limite de Cenas:</label>
