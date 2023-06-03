@@ -18,6 +18,7 @@ class GPTStory:
         limit_scenes: int = 5,
         player_name: str = "",
         scene_count: int = 0,
+        is_family_friendly: bool = True,
     ):
         self.model = "gpt-3.5-turbo-0301"
         self.base_scenes = base_scenes
@@ -26,6 +27,7 @@ class GPTStory:
         self.player_name = player_name
         self.base_messages = []
         self.scene_count = scene_count
+        self.is_family_friendly = is_family_friendly
 
     def prepare_initial_messages(self) -> None:
         with open("data/messages.json", "r") as f:
@@ -33,16 +35,19 @@ class GPTStory:
 
             if not self.player_name:
                 self.player_name = input("Qual o seu nome? ")
-
-            messages = messages.replace("PLAYER_NAME", self.player_name)
+            if self.is_family_friendly:
+                messages = messages.replace("4. Utilize ", json.dumps("4. Não utilize ")[1:-1])
             messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
-            messages = messages.replace("BASE_CENA_1", self.base_scenes["cena_1"])
+            messages = messages.replace("PLAYER_NAME", self.player_name)
+            messages = messages.replace("BASE_CENA_1", json.dumps(self.base_scenes["cena_1"])[1:-1])
             messages = messages.replace(
-                "BASE_CENA_FINAL", self.base_scenes["cena_final"]
+                "BASE_CENA_FINAL", json.dumps(self.base_scenes["cena_final"])[1:-1]
             )
             self.base_messages = json.loads(messages)
 
         if self.messages:
+            m_aux = json.dumps(self.messages)
+            self.messages = json.loads(m_aux.replace("PLAYER_NAME", json.dumps(self.player_name)[1:-1]))
             self.messages = self.base_messages + self.messages
         else:
             self.messages = self.base_messages.copy()
@@ -63,10 +68,6 @@ class GPTStory:
     def generate_next_scene(self, cont: int = 0) -> dict:
         prompt = self.generate_prompt()
         self.messages.append(prompt)
-        if not self.finished_scene() and cont < 3:
-            print(cont)
-            self.generate_next_scene(cont + 1)
-            self.messages[-1]["content"] += self.messages.pop(-1)
         return prompt
 
     def get_last_scene(self) -> None:
@@ -96,7 +97,6 @@ class GPTStory:
         scene = self.messages[-1]["content"].lower()
         return (
             "Fim da história".lower() in scene
-            or "próxima ação".lower() in scene
             or "Fim da cena".lower() in scene
         )
 
@@ -116,4 +116,5 @@ class GPTStory:
             "limit_scenes": self.limit_scenes,
             "player_name": self.player_name,
             "scene_count": self.scene_count,
+            "is_family_friendly": self.is_family_friendly,
         }

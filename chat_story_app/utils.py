@@ -6,6 +6,7 @@ def get_gpt_story(request, create=True, messages=[]) -> GPTStory:
     if create:
         if messages:
             messages = json.loads(messages)
+            messages[-1]["content"] = messages[-1]["content"].replace("Fim da história", "Qual a proxima ação?")
 
         base = {
             "base_scenes": {
@@ -15,9 +16,13 @@ def get_gpt_story(request, create=True, messages=[]) -> GPTStory:
             "messages": messages,
             "limit_scenes": int(request.POST.get("limit_scenes")),
             "player_name": request.POST.get("player_name"),
+            "is_family_friendly": request.POST.get("is_family_friendly", True)
         }
         gpt_story = GPTStory(**base)
-        gpt_story.run()
+        if messages:
+            gpt_story.prepare_initial_messages()
+        else:
+            gpt_story.run()
         request.session["gpt_story"] = gpt_story.__dict__()
     else:
         base = request.session["gpt_story"]
