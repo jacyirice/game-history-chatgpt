@@ -6,10 +6,9 @@ from django.urls import reverse
 from django.views import View
 
 from .include.antlr.enter_player.syntax import valid as valid_syntax_enter_user
-from .include.antlr.data_story.syntax import valid as valid_syntax_data_story
 from .utils import get_gpt_story
 from .models import ChatStory
-
+from .forms import HomeForm
 # Create your views here.
 
 
@@ -21,30 +20,18 @@ class HomeView(View):
         if "gpt_story" in request.session:
             del request.session["gpt_story"]
 
-        return render(request, self.template_name)
+        form = HomeForm()
+        return render(request, self.template_name, {"form": form})
 
     def post(self, request):
-        cena_1 = request.POST.get("cena_1")
-        cena_final = request.POST.get("cena_final")
-        limit_scenes = request.POST.get("limit_scenes")
-        player_name = request.POST.get("player_name")
-        messages = request.FILES.get("messages")
+        form = HomeForm(request.POST, request.FILES)
 
-        if not (cena_final and limit_scenes and player_name):
-            return redirect("home_view")
-
-        if not (cena_1 or messages):
-            return redirect("home_view")
-
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
+        
         url = "chat_view"
+        messages = form.cleaned_data["messages"]
         if messages:
-            messages = messages.read().decode("utf-8")
-            status, error = valid_syntax_data_story(messages)
-
-            if not status:
-                context = {"error_input_file": error}
-                return render(request, self.template_name, context)
-
             url = reverse(url) + f"?scene_num=0"
 
         gpt_story = get_gpt_story(request, messages=messages)
