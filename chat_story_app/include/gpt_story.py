@@ -37,9 +37,14 @@ class GPTStory:
                 self.player_name = input("Qual o seu nome? ")
             if self.is_family_friendly:
                 messages = messages.replace("4. Utilize ", json.dumps("4. Não utilize ")[1:-1])
+
+            if self.base_scenes["cena_1"]:
+                messages = messages.replace("BASE_CENA_1", json.dumps(self.base_scenes["cena_1"])[1:-1])
+            else:
+                messages = messages.replace("\n\nBase da cena 1: BASE_CENA_1;", "")
+
             messages = messages.replace("LIMIT_SCENES", str(self.limit_scenes))
             messages = messages.replace("PLAYER_NAME", self.player_name)
-            messages = messages.replace("BASE_CENA_1", json.dumps(self.base_scenes["cena_1"])[1:-1])
             messages = messages.replace(
                 "BASE_CENA_FINAL", json.dumps(self.base_scenes["cena_final"])[1:-1]
             )
