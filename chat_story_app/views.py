@@ -28,7 +28,7 @@ class HomeView(View):
         limit_scenes = request.POST.get("limit_scenes")
         player_name = request.POST.get("player_name")
 
-        if cena_1 and cena_final and limit_scenes and player_name:
+        if cena_final and limit_scenes and player_name:
             messages = request.FILES.get("messages")
             url = "chat_view"
 
