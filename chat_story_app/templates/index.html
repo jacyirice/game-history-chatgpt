@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Story</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+        }
+
+        .form-title {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 30px;
+        }
+
+        .story-text {
+            white-space: pre-wrap;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .alert-text {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="story-text">{{ texto }}</div>
+        {% if scene_num|add:"0"  < last_scene_num|add:"0"  %}
+            <div class="d-flex justify-content-between">
+                {% if scene_num|add:"0" > 0 %}
+                    {% with scene_num_new=scene_num|add:"-1" %}
+                        <a href="{% url 'chat_view' %}?scene_num={{ scene_num_new }}" class="btn btn-primary"><-</a>
+                    {% endwith %}
+                {% endif %}
+
+                {% if scene_num|add:"0" == last_scene_num|add:"-1" %}
+                    <a href="{% url 'chat_view' %}" class="btn btn-primary ml-auto">-></a>
+                {% else %}
+                    {% with scene_num_new=scene_num|add:"1" %}
+                        <a href="{% url 'chat_view' %}?scene_num={{ scene_num_new }}" class="btn btn-primary ml-auto">-></a>
+                    {% endwith %}
+                {% endif %}
+            </div>
+        {% else %}
+            {% if has_next_scene %}
+                {% if error_input %}
+                    <div class="alert alert-danger alert-text">{{ error_input }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'chat_view' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="input_action">Digite a ação e os sentimentos:</label>
+                        <textarea class="form-control" id="input_action" name="input_action" rows="5" placeholder="<NOME DO PERSONAGEM>: <AÇÃO DO PERSONAGEM>
+Sentimentos: <SENTIMENTO DO PERSONAGEM>">{{ input_value }}</textarea>
+                    </div>
+                    <button class="btn btn-primary btn-block" type="submit">Enviar</button>
+                </form>
+            {% else %}
+                <div class="d-flex justify-content-between">
+                    {% with scene_num_new=last_scene_num|add:"-1" %}
+                        <a href="{% url 'chat_view' %}?scene_num={{ scene_num_new }}" class="btn btn-primary"><-</a>
+                    {% endwith %}
+                    <a href="{% url 'home_view' %}" class="btn btn-primary">Reiniciar</a>
+                    <a href="{% url 'download_story_view' %}" class="btn btn-primary">Baixar História</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
